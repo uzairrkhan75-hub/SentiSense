@@ -1,0 +1,11 @@
+# Optional deep-learning (BERT/RoBERTa) support for the hybrid engine and the
+# Models comparison dashboard. These are large; install only if you want the
+# transformer model. CPU-only install (no GPU required):
+#
+#   pip install torch==2.4.1 --index-url https://download.pytorch.org/whl/cpu
+#   pip install transformers==4.44.2
+#
+# The 3-class sentiment model (~500 MB) downloads automatically on first use and
+# is cached by Hugging Face. Disable it any time with SENTISENSE_DISABLE_BERT=1.
+torch==2.4.1
+transformers==4.44.2

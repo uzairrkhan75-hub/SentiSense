@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant U as User (Browser)
+    participant F as React SPA
+    participant A as Flask /api/analyze
+    participant E as Hybrid Engine
+    participant DB as MongoDB
+
+    U->>F: Enter text, click Analyze
+    F->>A: POST /api/analyze (text + JWT)
+    A->>A: Verify JWT
+    A->>E: preprocess + run models
+    E-->>A: label, confidence, per-model, emotions, explanation
+    A->>DB: Save analysis to history
+    A-->>F: JSON result
+    F-->>U: Render charts + highlights

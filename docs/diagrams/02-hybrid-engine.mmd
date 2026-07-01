@@ -1,0 +1,13 @@
+flowchart LR
+    In["Input Text"] --> P["Preprocess<br/>(clean · lemmatize)"]
+    P --> V["VADER<br/>(rule-based)"]
+    P --> TB["TextBlob<br/>(rule-based)"]
+    P --> MLm["TF-IDF + ML<br/>(scikit-learn)"]
+    P --> RB["RoBERTa<br/>(transformer, optional)"]
+
+    V --> W["Weighted Vote<br/>+ Confidence Score"]
+    TB --> W
+    MLm --> W
+    RB --> W
+
+    W --> Out["Final Label<br/>positive / negative / neutral<br/>+ per-model breakdown"]

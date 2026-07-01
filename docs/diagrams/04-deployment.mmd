@@ -1,0 +1,7 @@
+graph LR
+    Dev["Developer / User"] -->|":5173"| FE["Vite Dev Server<br/>React SPA"]
+    FE -->|"proxy /api → :5000"| BE["Flask API Server"]
+    BE --> DB[("MongoDB<br/>:27017")]
+    BE --> FS["Local Filesystem<br/>ml/artifacts/"]
+    BE -.optional.-> HF["Hugging Face<br/>model download"]
+    BE -.->|outbound| WWW["Web / HN / Reddit"]

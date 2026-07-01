@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-06-30T12:51:39.253038+00:00",
+  "dataset_size": 396,
+  "test_size": 99,
+  "labels": [
+    "negative",
+    "neutral",
+    "positive"
+  ],
+  "models": {
+    "naive_bayes": {
+      "accuracy": 0.9091,
+      "precision": 0.9137,
+      "recall": 0.91,
+      "f1": 0.9093,
+      "confusion_matrix": [
+        [
+          31,
+          1,
+          0
+        ],
+        [
+          3,
+          29,
+          1
+        ],
+        [
+          3,
+          1,
+          30
+        ]
+      ]
+    },
+    "logistic_regression": {
+      "accuracy": 0.9091,
+      "precision": 0.9137,
+      "recall": 0.91,
+      "f1": 0.9093,
+      "confusion_matrix": [
+        [
+          31,
+          1,
+          0
+        ],
+        [
+          3,
+          29,
+          1
+        ],
+        [
+          3,
+          1,
+          30
+        ]
+      ]
+    },
+    "linear_svc": {
+      "accuracy": 0.9091,
+      "precision": 0.9137,
+      "recall": 0.91,
+      "f1": 0.9093,
+      "confusion_matrix": [
+        [
+          31,
+          1,
+          0
+        ],
+        [
+          3,
+          29,
+          1
+        ],
+        [
+          3,
+          1,
+          30
+        ]
+      ]
+    }
+  }
+}

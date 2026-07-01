@@ -1,0 +1,254 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --ss-primary: #F06E4B;
+    --ss-primary-dark: #D85A38;
+    --ss-primary-light: #f7b09c;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 antialiased;
+  }
+}
+
+@layer components {
+  .bg-primary {
+    background-color: var(--ss-primary) !important;
+  }
+  .bg-primary-dark {
+    background-color: var(--ss-primary-dark) !important;
+  }
+  .text-primary {
+    color: var(--ss-primary) !important;
+  }
+  .text-primary-light {
+    color: var(--ss-primary-light) !important;
+  }
+  .border-primary {
+    border-color: var(--ss-primary) !important;
+  }
+  .glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/40 shadow-xl;
+  }
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold text-white transition-all hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-60 disabled:hover:translate-y-0;
+    background-color: var(--ss-primary);
+    box-shadow: 0 10px 15px -3px rgb(240 110 75 / 0.35);
+  }
+  .btn-primary:hover:not(:disabled) {
+    background-color: var(--ss-primary-dark);
+    box-shadow: 0 10px 20px -3px rgb(240 110 75 / 0.45);
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 font-medium text-slate-700 transition-all hover:text-[#D85A38];
+  }
+  .btn-ghost:hover {
+    border-color: var(--ss-primary);
+  }
+  .input {
+    @apply w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-slate-800 outline-none transition-all placeholder:text-slate-400 focus:ring-4 focus:ring-brand-100;
+  }
+  .input:focus {
+    border-color: var(--ss-primary);
+  }
+  .card {
+    @apply rounded-2xl border border-slate-100 bg-white p-6 shadow-sm;
+  }
+}
+
+/* Animated aurora background */
+.aurora {
+  background: radial-gradient(circle at 20% 20%, rgba(240, 110, 75, 0.2), transparent 40%),
+    radial-gradient(circle at 80% 30%, rgba(216, 90, 56, 0.15), transparent 40%),
+    radial-gradient(circle at 50% 80%, rgba(247, 176, 156, 0.12), transparent 40%);
+}
+
+/* ----------------------------------------------------------------------------
+   Dark mode. We override the most-used utility classes under `.dark` so the
+   whole UI adapts without touching every component. `.dark .x` (two classes)
+   outranks the single-class utility, so these win regardless of layer order.
+---------------------------------------------------------------------------- */
+.dark body {
+  @apply bg-slate-950 text-slate-200;
+}
+.dark .card {
+  @apply border-slate-700 bg-slate-800 shadow-none;
+}
+.dark .glass {
+  background-color: rgba(30, 41, 59, 0.7);
+  border-color: rgba(148, 163, 184, 0.15);
+}
+.dark .input {
+  @apply border-slate-600 bg-slate-900 text-slate-100 placeholder:text-slate-500;
+}
+.dark .btn-ghost {
+  @apply border-slate-600 bg-slate-800 text-slate-200 hover:border-brand-500;
+}
+
+/* Primary-tinted surfaces */
+.dark .bg-brand-50 {
+  background-color: rgba(240, 110, 75, 0.16) !important;
+}
+.dark .bg-white,
+.dark .bg-white\/70 {
+  background-color: rgb(30 41 59) !important;
+}
+.dark .bg-white\/70 {
+  background-color: rgba(30, 41, 59, 0.75) !important;
+}
+.dark .bg-slate-50 {
+  background-color: rgb(15 23 42) !important;
+}
+.dark .bg-slate-100 {
+  background-color: rgb(51 65 85) !important;
+}
+.dark .bg-slate-200 {
+  background-color: rgb(71 85 105) !important;
+}
+
+/* Text */
+.dark .text-slate-800,
+.dark .text-slate-700 {
+  color: rgb(226 232 240) !important;
+}
+.dark .text-slate-600,
+.dark .text-slate-500 {
+  color: rgb(148 163 184) !important;
+}
+
+/* Borders */
+.dark .border-slate-100,
+.dark .border-slate-200 {
+  border-color: rgb(51 65 85) !important;
+}
+
+/* Light gradient tiles (e.g. Dashboard quick actions) */
+.dark .from-white {
+  --tw-gradient-from: #1e293b var(--tw-gradient-from-position) !important;
+}
+.dark .to-slate-50 {
+  --tw-gradient-to: #0f172a var(--tw-gradient-to-position) !important;
+}
+
+/* Animated pill border (Dashboard hero badge) */
+.pill-animated-border {
+  position: relative;
+  border-radius: 9999px;
+  padding: 1.5px;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.pill-animated-border::before {
+  content: "";
+  position: absolute;
+  inset: -150%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg 50deg,
+    #f7b09c 90deg,
+    #F06E4B 180deg,
+    #D85A38 270deg,
+    transparent 310deg 360deg
+  );
+  animation: pill-border-spin 2.8s linear infinite;
+}
+
+.pill-animated-border-inner {
+  position: relative;
+  z-index: 1;
+  border-radius: 9999px;
+  background: rgba(15, 23, 42, 0.92);
+  box-shadow: inset 0 0 0 1px rgba(240, 110, 75, 0.12);
+}
+
+@keyframes pill-border-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ==========================================================================
+   Theme overrides — loaded AFTER Tailwind utilities so #F06E4B always wins.
+   Fixes stale purple/indigo when the dev cache serves old compiled CSS.
+   ========================================================================== */
+.btn-primary,
+a.btn-primary,
+button.btn-primary {
+  background-color: #F06E4B !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  box-shadow: 0 10px 15px -3px rgb(240 110 75 / 0.35) !important;
+}
+.btn-primary:hover:not(:disabled) {
+  background-color: #D85A38 !important;
+  box-shadow: 0 10px 20px -3px rgb(240 110 75 / 0.45) !important;
+}
+
+.bg-primary {
+  background-color: #F06E4B !important;
+  background-image: none !important;
+}
+
+.bg-brand-500 {
+  background-color: #F06E4B !important;
+  background-image: none !important;
+}
+
+.bg-brand-600 {
+  background-color: #D85A38 !important;
+}
+
+.hover\:bg-brand-600:hover {
+  background-color: #D85A38 !important;
+}
+
+.text-primary,
+.text-brand-500,
+.text-brand-600 {
+  color: #F06E4B !important;
+}
+
+.text-brand-700 {
+  color: #D85A38 !important;
+}
+
+.border-brand-500,
+.hover\:border-brand-500:hover {
+  border-color: #F06E4B !important;
+}
+
+.from-brand-500 {
+  --tw-gradient-from: #F06E4B var(--tw-gradient-from-position) !important;
+  --tw-gradient-to: rgb(240 110 75 / 0) var(--tw-gradient-to-position) !important;
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to) !important;
+}
+
+.to-purple-500 {
+  --tw-gradient-to: #F06E4B var(--tw-gradient-to-position) !important;
+}
+
+.bg-gradient-to-r.from-brand-500.to-purple-500,
+.bg-gradient-to-br.from-brand-500.to-purple-500 {
+  background-image: none !important;
+  background-color: #F06E4B !important;
+}
+
+.shadow-brand-500\/30 {
+  --tw-shadow-color: rgb(240 110 75 / 0.3) !important;
+}
+
+.bg-brand-50 {
+  background-color: #fef5f2 !important;
+}
+
+.dark .bg-brand-50 {
+  background-color: rgba(240, 110, 75, 0.16) !important;
+}

@@ -1,0 +1,48 @@
+graph TB
+    subgraph Client["Client Tier — Browser"]
+        UI["React SPA (Vite)<br/>React Router · Tailwind CSS<br/>Framer Motion · Recharts"]
+    end
+
+    subgraph Server["Application Tier — Flask REST API (port 5000)"]
+        CORS["Flask-CORS"]
+        JWT["Flask-JWT-Extended<br/>(Auth Middleware)"]
+        subgraph Routes["API Routes"]
+            AuthR["auth.py<br/>register / login"]
+            AnalyzeR["analyze.py<br/>analyze · url · bulk · social<br/>history · trends · export · models"]
+        end
+        subgraph Services["NLP / ML Services"]
+            Pre["preprocess.py<br/>clean · lemmatize"]
+            Eng["engine.py<br/>Hybrid Engine (weighted vote)"]
+            ML["ml_model.py<br/>TF-IDF + classifier"]
+            TF["transformer_model.py<br/>RoBERTa (optional)"]
+            Emo["emotion.py<br/>NRC lexicon"]
+            Exp["explain.py<br/>per-word highlight"]
+        end
+    end
+
+    subgraph Data["Data Tier"]
+        Mongo[("MongoDB<br/>users · analyses")]
+        Artifacts["ML Artifacts<br/>model.joblib · metrics.json"]
+    end
+
+    subgraph External["External Sources"]
+        Web["Web Articles (URL fetch)"]
+        Social["Hacker News / Reddit"]
+    end
+
+    UI -->|"HTTPS / JSON  /api/*"| CORS
+    CORS --> JWT
+    JWT --> AuthR
+    JWT --> AnalyzeR
+
+    AuthR --> Mongo
+    AnalyzeR --> Pre
+    Pre --> Eng
+    Eng --> ML
+    Eng --> TF
+    Eng --> Emo
+    Eng --> Exp
+    ML --> Artifacts
+    AnalyzeR --> Mongo
+    AnalyzeR -->|fetch + parse| Web
+    AnalyzeR -->|fetch posts| Social
