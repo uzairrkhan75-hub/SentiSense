@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Mail, Lock, Loader2 } from "lucide-react";
 import AuthLayout from "../components/AuthLayout";
+import GoogleAuthButton from "../components/GoogleAuthButton";
 import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
@@ -60,6 +61,7 @@ export default function Login() {
           {loading ? "Signing in..." : "Sign in"}
         </button>
       </form>
+      <GoogleAuthButton onError={setError} />
       <p className="mt-6 text-center text-sm text-slate-500">
         Don&apos;t have an account?{" "}
         <Link to="/register" className="font-semibold text-brand-600 hover:underline">

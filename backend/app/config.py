@@ -13,6 +13,8 @@ class Config:
 
     MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/sentisense")
 
+    GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID", "")
+
     CORS_ORIGINS = [
         origin.strip()
         for origin in os.getenv("CORS_ORIGINS", "http://localhost:5173").split(",")

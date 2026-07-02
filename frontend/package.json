@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@react-oauth/google": "^0.12.2",
     "axios": "^1.7.2",
     "framer-motion": "^11.3.8",
     "lucide-react": "^0.414.0",

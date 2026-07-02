@@ -2,8 +2,10 @@ import re
 
 import bcrypt
 from bson import ObjectId
-from flask import Blueprint, jsonify, request
+from flask import Blueprint, current_app, jsonify, request
 from flask_jwt_extended import create_access_token
+from google.auth.transport import requests as google_requests
+from google.oauth2 import id_token as google_id_token
 from pymongo.errors import DuplicateKeyError, PyMongoError
 
 from ..models.db import get_users
@@ -70,7 +72,8 @@ def login():
     except PyMongoError:
         return jsonify({"error": "Database unavailable. Please try again later."}), 503
 
-    if not user or not _check_password(password, user["password"]):
+    stored_hash = user.get("password") if user else None
+    if not user or not stored_hash or not _check_password(password, stored_hash):
         return jsonify({"error": "Invalid email or password."}), 401
 
     user_id = str(user["_id"])
@@ -79,5 +82,54 @@ def login():
         {
             "token": token,
             "user": {"id": user_id, "name": user.get("name"), "email": user["email"]},
+        }
+    )
+
+
+@auth_bp.post("/google")
+def google_login():
+    """Verify a Google ID token and log the user in, creating an account if needed."""
+    data = request.get_json(silent=True) or {}
+    credential = data.get("credential") or ""
+    if not credential:
+        return jsonify({"error": "Missing Google credential."}), 400
+
+    client_id = current_app.config.get("GOOGLE_CLIENT_ID")
+    if not client_id:
+        return jsonify({"error": "Google sign-in is not configured."}), 503
+
+    try:
+        payload = google_id_token.verify_oauth2_token(
+            credential, google_requests.Request(), client_id
+        )
+    except ValueError:
+        return jsonify({"error": "Invalid or expired Google credential."}), 401
+
+    email = (payload.get("email") or "").strip().lower()
+    if not email or not payload.get("email_verified"):
+        return jsonify({"error": "Google account has no verified email."}), 401
+    name = payload.get("name") or email.split("@")[0]
+    google_id = payload["sub"]
+
+    try:
+        users = get_users()
+        user = users.find_one({"email": email})
+        if user:
+            if not user.get("google_id"):
+                users.update_one({"_id": user["_id"]}, {"$set": {"google_id": google_id}})
+        else:
+            result = users.insert_one(
+                {"name": name, "email": email, "google_id": google_id}
+            )
+            user = {"_id": result.inserted_id, "name": name, "email": email}
+    except PyMongoError:
+        return jsonify({"error": "Database unavailable. Please try again later."}), 503
+
+    user_id = str(user["_id"])
+    token = create_access_token(identity=user_id)
+    return jsonify(
+        {
+            "token": token,
+            "user": {"id": user_id, "name": user.get("name"), "email": email},
         }
     )
