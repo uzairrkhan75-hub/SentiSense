@@ -16,4 +16,5 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "run.py"]
+# Render injects $PORT at runtime; default to 5000 for local `docker run`.
+CMD gunicorn -w 2 -b 0.0.0.0:${PORT:-5000} --timeout 120 wsgi:app
