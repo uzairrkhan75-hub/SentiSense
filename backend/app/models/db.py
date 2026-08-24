@@ -3,6 +3,7 @@
 The connection is created lazily so the rest of the app can still import this
 module (and run rule-based analysis) even when MongoDB is unreachable.
 """
+import certifi
 from flask import current_app, g
 from pymongo import MongoClient, ASCENDING
 from pymongo.errors import PyMongoError
@@ -15,7 +16,9 @@ def get_client():
     if _client is None:
         uri = current_app.config["MONGO_URI"]
         # serverSelectionTimeoutMS keeps requests from hanging when Mongo is down.
-        _client = MongoClient(uri, serverSelectionTimeoutMS=3000)
+        # tlsCAFile=certifi.where() avoids TLS handshake failures against Atlas
+        # on minimal base images (e.g. python:3.12-slim) with stale system CA certs.
+        _client = MongoClient(uri, serverSelectionTimeoutMS=5000, tlsCAFile=certifi.where())
     return _client
 
 
